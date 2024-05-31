@@ -1,0 +1,33 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       Int    @id @unique
+  email    String @unique
+  username String @db.VarChar(100) //maxlength (100)
+  password String
+   comment Comment[]
+}
+
+model Comment {
+  id     Int    @id @unique
+  coment String
+  bookId Int
+  book   Book?  @relation(fields: [bookId], references: [id])
+  userId Int
+  users   User?   @relation(fields: [userId], references: [id])
+}
+
+model Book {
+  id      Int       @id @unique
+  title   String
+  desc    String    @db.VarChar(100) //maxlength (100)
+  price   Int
+  comment Comment[]
+}
